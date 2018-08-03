@@ -1,0 +1,655 @@
+<#> Stack Overflow <https://stackoverflow.com/>
+
+ 1.
+
+    <#>
+ 2.
+
+    <https://stackexchange.com/users/?tab=inbox>
+ 3.
+
+    <https://stackexchange.com/users/?tab=reputation>
+ 4.
+
+    <#>
+ 5.
+
+    <https://stackexchange.com/>
+ 6. Log In
+    <https://stackoverflow.com/users/login?ssrc=head&returnurl=https%3a%2f%2fstackoverflow.com%2fquestions%2f46678202%2fcurl-command-in-bash-script-using-variables>
+    Sign Up
+    <https://stackoverflow.com/users/signup?ssrc=head&returnurl=%2fusers%2fstory%2fcurrent>
+
+ 7.
+
+
+          current community <https://stackoverflow.com/>
+
+      *
+        Stack Overflow <https://stackoverflow.com/>
+        help <https://stackoverflow.com/help> chat
+        <https://chat.stackoverflow.com/>
+      *
+        Meta Stack Overflow <https://meta.stackoverflow.com/>
+
+
+          your communities
+
+    Sign up
+    <https://stackoverflow.com/users/signup?ssrc=site_switcher&returnurl=%2fusers%2fstory%2fcurrent>
+    or log in
+    <https://stackoverflow.com/users/login?ssrc=site_switcher&returnurl=https%3a%2f%2fstackoverflow.com%2fquestions%2f46678202%2fcurl-command-in-bash-script-using-variables>
+    to customize your list.
+
+
+          more stack exchange communities <https://stackexchange.com/sites>
+
+    company blog <https://stackoverflow.blog/>
+      * Tour Start here for a quick overview of the site
+        <https://stackoverflow.com/tour>
+      * Help Center Detailed answers to any questions you might have
+        <https://stackoverflow.com/help>
+      * Meta Discuss the workings and policies of this site
+        <https://meta.stackoverflow.com/>
+      * About Us Learn more about Stack Overflow the company
+        <https://stackoverflow.com/company/about>
+      * Business Learn more about hiring developers or posting ads with
+        us <https://www.stackoverflowbusiness.com/?ref=topbar_help>
+
+*Join Stack Overflow* to learn, share knowledge, and build your career.
+
+Email Sign Up Sign Up
+<https://stackoverflow.com/users/signup?ssrc=hero&returnurl=https%3a%2f%2fstackoverflow.com%2fquestions%2f46678202%2fcurl-command-in-bash-script-using-variables>
+or sign in with
+Google
+Facebook
+<#>
+
+ 1.
+ 2. Home <https://stackoverflow.com/>
+ 3.
+     1. Public
+     2.
+
+        Stack Overflow <https://stackoverflow.com/questions>
+     3. Tags <https://stackoverflow.com/tags>
+     4. Users <https://stackoverflow.com/users>
+     5. Jobs <https://stackoverflow.com/jobs?med=site-ui&ref=jobs-tab>
+ 4.
+     1. Teams
+     2.
+
+        Create Team <https://stackoverflow.com/teams>
+
+
+  Curl command in bash script using variables
+  <https://stackoverflow.com/questions/46678202/curl-command-in-bash-script-using-variables>
+
+Ask Question <https://stackoverflow.com/questions/ask>
+up vote 1 down vote favorite <#>
+**
+
+I have a curl command that looks like this:
+
+|curl -X PUT -H "myheader:coca-cola" -d '{ "name":"harrypotter" }' http://mygoogle.com/service/books/123|
+
+Running this command as is via terminal returns the expected results.
+
+I am trying to incorporate this curl command in my bash script as follows:
+
+|#!/bin/bash
+
+MYURL=http://mygoogle.com/service/books/123
+
+# Generate body for curl request
+generate_put_data()
+{
+  cat <<EOF
+{
+  "name":"harrypotter"
+}
+EOF
+}
+
+put_data=$(echo "$(generate_put_data)")
+put_data_with_single_quotes="'$put_data'"
+
+# Generate headers for curl request
+header=myheader:coca-cola
+header_with_double_quotes="\"$header\""
+
+# The following function takes two inputs - a simple string variable (with no spaces or quotes) and the curl command string
+function run_cmd() {
+  echo $1
+  echo $2
+
+  #Run the curl command
+  "$2"
+
+  #Check return code of the curl command
+  if [ "$?" -ne 0 ]; then
+    #do something with simple string variable
+    echo "$1"
+    echo "Job failed"
+    exit 1
+  else
+    #do something with simple string variable
+    echo "$1"
+    echo "Job Succeeded"
+  fi
+}
+
+# Run the bash function - run_cmd
+
+run_cmd "mysimplestring" "curl -X PUT -H $header_with_double_quotes -d $put_data_with_single_quotes $MYURL"|
+
+However, when I try to run the above bash script, it fails at the point
+where I call run_cmd() function with the two inputs. I get the following
+error:
+
+|curl -X PUT -H "myheader:coca-cola" -d '{
+  "name":"harrypotter"
+}' http://mygoogle.com/service/books/123: No such file or directory
+Job failed|
+
+This error occurs on the line where |"$2"| is being executed in the run_cmd() function declaration.
+
+Could someone help me understand where I am going wrong? Thanks!
+
+bash <https://stackoverflow.com/questions/tagged/bash> shell
+<https://stackoverflow.com/questions/tagged/shell> curl
+<https://stackoverflow.com/questions/tagged/curl> double-quotes
+<https://stackoverflow.com/questions/tagged/double-quotes> single-quotes
+<https://stackoverflow.com/questions/tagged/single-quotes>
+share <https://stackoverflow.com/q/46678202>|improve this question
+<https://stackoverflow.com/posts/46678202/edit>
+asked Oct 11 '17 at 1:09
+<https://stackoverflow.com/users/3469521/activelearner>
+activelearner <https://stackoverflow.com/users/3469521/activelearner>
+1,21852451
+
+  *
+    Embedding quotes in variables doesn't work. Variables contain data;
+    in shell syntax, quotes go /around/ data, not /in/ data. See my
+    answer to this question on superuser
+    <https://superuser.com/questions/360966/how-do-i-use-a-bash-variable-string-containing-quotes-in-a-command#360986>.
+    – Gordon Davisson
+    <https://stackoverflow.com/users/89817/gordon-davisson> Oct 11 '17
+    at 1:24 <#comment80304885_46678202>
+
+add a comment |  <#>
+
+
+    1 Answer 1
+
+active
+<https://stackoverflow.com/questions/46678202/curl-command-in-bash-script-using-variables?answertab=active#tab-top>
+oldest
+<https://stackoverflow.com/questions/46678202/curl-command-in-bash-script-using-variables?answertab=oldest#tab-top>
+votes
+<https://stackoverflow.com/questions/46678202/curl-command-in-bash-script-using-variables?answertab=votes#tab-top>
+
+up vote 0 down vote accepted
+
+|"$2"|
+
+This will take the second argument and try to run it without doing any
+word splitting. It treats it as one string.
+
+You're going to run into trouble passing in the curl command as one
+string. You'll do better if you pass it without quotes, just as if you
+typed it on the command line. You'll want to quote each of the variables
+but not quote the command as a whole.
+
+|run_cmd "mysimplestring" curl -X PUT -H "$header" -d "$put_data" "$MYURL"|
+
+Notice that you don't need the "with_quotes" variables any more. You
+don't have to do anything like that. The original plain values will work.
+
+Now you can access the command using array syntax:
+
+|function run_cmd() {
+  local name=$1; shift
+  local cmd=("$@")
+
+  #Run the curl command
+  "${cmd[@]}"
+}|
+
+By the way, this is a useless use of |echo|:
+
+|put_data=$(echo "$(generate_put_data)")|
+
+Make that:
+
+|put_data=$(generate_put_data)|
+
+share <https://stackoverflow.com/a/46678349>|improve this answer
+<https://stackoverflow.com/posts/46678349/edit>
+answered Oct 11 '17 at 1:28
+<https://stackoverflow.com/users/68587/john-kugelman>
+John Kugelman <https://stackoverflow.com/users/68587/john-kugelman>
+227k51385437
+
+add a comment |  <#>
+
+
+    Your Answer
+
+  *
+  *
+  *
+  *
+  *
+  *
+  *
+  *
+  *
+  *
+  *
+  *
+  *
+  *
+  *
+*
+
+ 
+draft saved
+draft discarded
+
+
+      Sign up or log in
+      <https://stackoverflow.com/users/login?ssrc=question_page&returnurl=https%3a%2f%2fstackoverflow.com%2fquestions%2f46678202%2fcurl-command-in-bash-script-using-variables%23new-answer>
+
+Sign up using Google
+Sign up using Facebook
+Sign up using Email and Password
+
+
+      Post as a guest
+
+Name
+
+Email
+
+Post Your Answer Discard
+
+By clicking "Post Your Answer", you acknowledge that you have read our
+updated terms of service
+<https://stackoverflow.com/legal/terms-of-service/public>, privacy
+policy <https://stackoverflow.com/legal/privacy-policy> and cookie
+policy <https://stackoverflow.com/legal/cookie-policy>, and that your
+continued use of the website is subject to these policies.
+
+
+    Not the answer you're looking for? Browse other questions tagged
+    bash <https://stackoverflow.com/questions/tagged/bash> shell
+    <https://stackoverflow.com/questions/tagged/shell> curl
+    <https://stackoverflow.com/questions/tagged/curl> double-quotes
+    <https://stackoverflow.com/questions/tagged/double-quotes>
+    single-quotes
+    <https://stackoverflow.com/questions/tagged/single-quotes> or ask
+    your own question <https://stackoverflow.com/questions/ask>.
+
+asked
+
+	
+
+*9 months ago*
+
+viewed
+
+	
+
+*237 times*
+
+active
+
+	
+
+*9 months ago
+<https://stackoverflow.com/questions/46678202/curl-command-in-bash-script-using-variables?lastactivity>*
+
+Looking for a job? <https://stackoverflow.com/jobs>
+
+  *
+    Senior Back End Developer - Python, Django - Groundbreaking Retail Tech
+    MishiPayBengaluru, India
+    pythonrest
+    <https://stackoverflow.com/jobs/194010/senior-back-end-developer-python-django-mishipay>
+    dismiss this job
+  *
+    DevOps Engineer
+    HeetchNo office location
+
+    Remote
+    dockeramazon-web-services
+    <https://stackoverflow.com/jobs/197159/devops-engineer-heetch>
+    dismiss this job
+  *
+    Senior Platform Engineer - Product Development in Distributed
+    Environment
+    PaysafeHyderabad, India
+
+    Relocation
+    javabigdata
+    <https://stackoverflow.com/jobs/167588/senior-platform-engineer-product-development-in-paysafe>
+    dismiss this job
+  *
+    Full Stack Engineer in a cryptocurrency startup
+    Chorus OneBerlin, Germany
+    $70k - $110k
+
+    Remote
+    pythonjavascript
+
+    High response rate
+     <https://stackoverflow.com/jobs/195628/full-stack-engineer-in-a-cryptocurrency-startup-chorus-one>
+    dismiss this job
+
+
+        Related
+
+2983
+ <https://stackoverflow.com/q/59838?rq=1>Check if a directory exists in
+a shell script
+<https://stackoverflow.com/questions/59838/check-if-a-directory-exists-in-a-shell-script?rq=1>
+3925
+ <https://stackoverflow.com/q/59895?rq=1>Getting the source directory of
+a Bash script from within
+<https://stackoverflow.com/questions/59895/getting-the-source-directory-of-a-bash-script-from-within?rq=1>
+3608
+ <https://stackoverflow.com/q/89228?rq=1>Calling an external command in
+Python
+<https://stackoverflow.com/questions/89228/calling-an-external-command-in-python?rq=1>
+1052
+ <https://stackoverflow.com/q/169511?rq=1>How do I iterate over a range
+of numbers defined by variables in Bash?
+<https://stackoverflow.com/questions/169511/how-do-i-iterate-over-a-range-of-numbers-defined-by-variables-in-bash?rq=1>
+1569
+ <https://stackoverflow.com/q/592620?rq=1>How to check if a program
+exists from a Bash script?
+<https://stackoverflow.com/questions/592620/how-to-check-if-a-program-exists-from-a-bash-script?rq=1>
+2494
+ <https://stackoverflow.com/q/638975?rq=1>How do I tell if a regular
+file does not exist in Bash?
+<https://stackoverflow.com/questions/638975/how-do-i-tell-if-a-regular-file-does-not-exist-in-bash?rq=1>
+1502
+ <https://stackoverflow.com/q/918886?rq=1>How do I split a string on a
+delimiter in Bash?
+<https://stackoverflow.com/questions/918886/how-do-i-split-a-string-on-a-delimiter-in-bash?rq=1>
+1064
+ <https://stackoverflow.com/q/3601515?rq=1>How to check if a variable is
+set in Bash?
+<https://stackoverflow.com/questions/3601515/how-to-check-if-a-variable-is-set-in-bash?rq=1>
+2087
+ <https://stackoverflow.com/q/4181703?rq=1>How to concatenate string
+variables in Bash
+<https://stackoverflow.com/questions/4181703/how-to-concatenate-string-variables-in-bash?rq=1>
+1078
+ <https://stackoverflow.com/q/4651437?rq=1>How to set a variable to the
+output of a command in Bash?
+<https://stackoverflow.com/questions/4651437/how-to-set-a-variable-to-the-output-of-a-command-in-bash?rq=1>
+
+
+        Hot Network Questions <https://stackexchange.com/questions?tab=hot>
+
+  *
+    How to make the randomforest trees vote decimals but not binary
+    <https://stats.stackexchange.com/questions/358948/how-to-make-the-randomforest-trees-vote-decimals-but-not-binary>
+
+  *
+    Do the Zariel tiefling's subrace bonuses stack with the tiefling's
+    regular racial bonuses?
+    <https://rpg.stackexchange.com/questions/128128/do-the-zariel-tieflings-subrace-bonuses-stack-with-the-tieflings-regular-racia>
+
+  *
+    How should advisor handle underperforming PhD student
+    <https://academia.stackexchange.com/questions/114143/how-should-advisor-handle-underperforming-phd-student>
+
+  *
+    How wide is the arc of the medusa's Petrifying Gaze?
+    <https://rpg.stackexchange.com/questions/128180/how-wide-is-the-arc-of-the-medusas-petrifying-gaze>
+
+  *
+    Is life insurance a financially sound safety net?
+    <https://money.stackexchange.com/questions/97889/is-life-insurance-a-financially-sound-safety-net>
+
+  *
+    Why wasn't Remus informed that the Secret Keeper had been changed?
+    <https://scifi.stackexchange.com/questions/191602/why-wasnt-remus-informed-that-the-secret-keeper-had-been-changed>
+
+  *
+    How do I deal with a loot hungry PC?
+    <https://rpg.stackexchange.com/questions/128133/how-do-i-deal-with-a-loot-hungry-pc>
+
+  *
+    How to avoid stripping screw heads?
+    <https://diy.stackexchange.com/questions/143809/how-to-avoid-stripping-screw-heads>
+
+  *
+    Why would you say "it changed me" instead of "it changed myself"?
+    <https://english.stackexchange.com/questions/457333/why-would-you-say-it-changed-me-instead-of-it-changed-myself>
+
+  *
+    Why would a healing factor superhero still be afraid of things?
+    <https://worldbuilding.stackexchange.com/questions/118819/why-would-a-healing-factor-superhero-still-be-afraid-of-things>
+
+  *
+    Chrome 68 "Not secure" How to make it in red color?
+    <https://superuser.com/questions/1343068/chrome-68-not-secure-how-to-make-it-in-red-color>
+
+  *
+    Can I ask for the Immigration and Customs declaration forms as soon
+    as possible on a flight to Japan?
+    <https://travel.stackexchange.com/questions/119216/can-i-ask-for-the-immigration-and-customs-declaration-forms-as-soon-as-possible>
+
+  *
+    Why do most scientists think Brexit is bad for British science?
+    <https://academia.stackexchange.com/questions/114135/why-do-most-scientists-think-brexit-is-bad-for-british-science>
+
+  *
+    Why does the UK produce so many research papers?
+    <https://academia.stackexchange.com/questions/114182/why-does-the-uk-produce-so-many-research-papers>
+
+  *
+    Why allow convicted criminals to vote?
+    <https://politics.stackexchange.com/questions/32359/why-allow-convicted-criminals-to-vote>
+
+  *
+    How can I end the Stunned Condition?
+    <https://rpg.stackexchange.com/questions/128167/how-can-i-end-the-stunned-condition>
+
+  *
+    Will SpaceX delay launches, if the landing site weather is
+    unacceptable?
+    <https://space.stackexchange.com/questions/29684/will-spacex-delay-launches-if-the-landing-site-weather-is-unacceptable>
+
+  *
+    Second marble is of same color
+    <https://math.stackexchange.com/questions/2862111/second-marble-is-of-same-color>
+
+  *
+    Alternating Pattern
+    <https://codegolf.stackexchange.com/questions/169214/alternating-pattern>
+
+  *
+    How to avoid the language barrier when there is no time to learn the
+    other language?
+    <https://worldbuilding.stackexchange.com/questions/119133/how-to-avoid-the-language-barrier-when-there-is-no-time-to-learn-the-other-langu>
+
+  *
+    How to make a diabetic coworker feel included when I bring in cake
+    for coworkers?
+    <https://workplace.stackexchange.com/questions/116387/how-to-make-a-diabetic-coworker-feel-included-when-i-bring-in-cake-for-coworkers>
+
+  *
+    How does the Life Drain ability of the Wraith and Specter interact
+    with temporary hit points?
+    <https://rpg.stackexchange.com/questions/128157/how-does-the-life-drain-ability-of-the-wraith-and-specter-interact-with-temporar>
+
+  *
+    How to create Linux command explainer text like this using a tool?
+    <https://apple.stackexchange.com/questions/331984/how-to-create-linux-command-explainer-text-like-this-using-a-tool>
+
+  *
+    Could a Dyson fan scale up to be used as a bladeless aircraft
+    engine?
+    <https://aviation.stackexchange.com/questions/53771/could-a-dyson-fan-scale-up-to-be-used-as-a-bladeless-aircraft-engine>
+
+
+question feed <https://stackoverflow.com/feeds/question/46678202>
+lang-sh
+<https://stackoverflow.com/>
+
+
+          Stack Overflow <https://stackoverflow.com/>
+
+  * Questions <https://stackoverflow.com/questions>
+  * Jobs <https://stackoverflow.com/jobs>
+  * Developer Jobs Directory
+    <https://stackoverflow.com/jobs/directory/developer-jobs>
+  * Salary Calculator <https://stackoverflow.com/jobs/salary>
+  * Help <https://stackoverflow.com/help>
+  * Mobile
+  * Disable Responsiveness
+
+
+          Products <https://www.stackoverflowbusiness.com/>
+
+  * Teams <https://stackoverflow.com/teams>
+  * Talent <https://www.stackoverflowbusiness.com/talent>
+  * Engagement <https://www.stackoverflowbusiness.com/advertise>
+  * Enterprise <https://stackoverflow.com/enterprise>
+
+
+          Company <https://stackoverflow.com/company/about>
+
+  * About <https://stackoverflow.com/company/about>
+  * Press <https://stackoverflow.com/company/press>
+  * Work Here <https://stackoverflow.com/company/work-here>
+  * Legal <https://stackoverflow.com/legal>
+  * Privacy Policy <https://stackoverflow.com/legal/privacy-policy>
+  * Contact Us <https://stackoverflow.com/company/contact>
+
+<#>
+
+
+          Stack Exchange
+          Network <https://stackexchange.com/>
+
+  * Technology <#>
+  * Life / Arts <#>
+  * Culture / Recreation <#>
+  * Science <#>
+  * Other <#>
+
+  * Stack Overflow <https://stackoverflow.com/>
+  * Server Fault <https://serverfault.com/>
+  * Super User <https://superuser.com/>
+  * Web Applications <https://webapps.stackexchange.com/>
+  * Ask Ubuntu <https://askubuntu.com/>
+  * Webmasters <https://webmasters.stackexchange.com/>
+  * Game Development <https://gamedev.stackexchange.com/>
+
+  * TeX - LaTeX <https://tex.stackexchange.com/>
+  * Software Engineering <https://softwareengineering.stackexchange.com/>
+  * Unix & Linux <https://unix.stackexchange.com/>
+  * Ask Different (Apple) <https://apple.stackexchange.com/>
+  * WordPress Development <https://wordpress.stackexchange.com/>
+  * Geographic Information Systems <https://gis.stackexchange.com/>
+  * Electrical Engineering <https://electronics.stackexchange.com/>
+
+  * Android Enthusiasts <https://android.stackexchange.com/>
+  * Information Security <https://security.stackexchange.com/>
+  * Database Administrators <https://dba.stackexchange.com/>
+  * Drupal Answers <https://drupal.stackexchange.com/>
+  * SharePoint <https://sharepoint.stackexchange.com/>
+  * User Experience <https://ux.stackexchange.com/>
+  * Mathematica <https://mathematica.stackexchange.com/>
+
+  * Salesforce <https://salesforce.stackexchange.com/>
+  * ExpressionEngine® Answers <https://expressionengine.stackexchange.com/>
+  * Stack Overflow em Português <https://pt.stackoverflow.com/>
+  * Blender <https://blender.stackexchange.com/>
+  * Network Engineering <https://networkengineering.stackexchange.com/>
+  * Cryptography <https://crypto.stackexchange.com/>
+  * Code Review <https://codereview.stackexchange.com/>
+
+  * Magento <https://magento.stackexchange.com/>
+  * Software Recommendations <https://softwarerecs.stackexchange.com/>
+  * Signal Processing <https://dsp.stackexchange.com/>
+  * Emacs <https://emacs.stackexchange.com/>
+  * Raspberry Pi <https://raspberrypi.stackexchange.com/>
+  * Stack Overflow на русском <https://ru.stackoverflow.com/>
+  * Programming Puzzles & Code Golf <https://codegolf.stackexchange.com/>
+
+  * Stack Overflow en español <https://es.stackoverflow.com/>
+  * Ethereum <https://ethereum.stackexchange.com/>
+  * Data Science <https://datascience.stackexchange.com/>
+  * Arduino <https://arduino.stackexchange.com/>
+  * Bitcoin <https://bitcoin.stackexchange.com/>
+  * *more (30) * <https://stackexchange.com/sites#technology>
+
+  * Photography <https://photo.stackexchange.com/>
+  * Science Fiction & Fantasy <https://scifi.stackexchange.com/>
+  * Graphic Design <https://graphicdesign.stackexchange.com/>
+  * Movies & TV <https://movies.stackexchange.com/>
+  * Music: Practice & Theory <https://music.stackexchange.com/>
+  * Worldbuilding <https://worldbuilding.stackexchange.com/>
+  * Seasoned Advice (cooking) <https://cooking.stackexchange.com/>
+
+  * Home Improvement <https://diy.stackexchange.com/>
+  * Personal Finance & Money <https://money.stackexchange.com/>
+  * Academia <https://academia.stackexchange.com/>
+  * Law <https://law.stackexchange.com/>
+  * *more (15) * <https://stackexchange.com/sites#lifearts>
+
+  * English Language & Usage <https://english.stackexchange.com/>
+  * Skeptics <https://skeptics.stackexchange.com/>
+  * Mi Yodeya (Judaism) <https://judaism.stackexchange.com/>
+  * Travel <https://travel.stackexchange.com/>
+  * Christianity <https://christianity.stackexchange.com/>
+  * English Language Learners <https://ell.stackexchange.com/>
+  * Japanese Language <https://japanese.stackexchange.com/>
+
+  * Arqade (gaming) <https://gaming.stackexchange.com/>
+  * Bicycles <https://bicycles.stackexchange.com/>
+  * Role-playing Games <https://rpg.stackexchange.com/>
+  * Anime & Manga <https://anime.stackexchange.com/>
+  * Puzzling <https://puzzling.stackexchange.com/>
+  * Motor Vehicle Maintenance & Repair
+    <https://mechanics.stackexchange.com/>
+  * *more (33) * <https://stackexchange.com/sites#culturerecreation>
+
+  * MathOverflow <https://mathoverflow.net/>
+  * Mathematics <https://math.stackexchange.com/>
+  * Cross Validated (stats) <https://stats.stackexchange.com/>
+  * Theoretical Computer Science <https://cstheory.stackexchange.com/>
+  * Physics <https://physics.stackexchange.com/>
+  * Chemistry <https://chemistry.stackexchange.com/>
+  * Biology <https://biology.stackexchange.com/>
+
+  * Computer Science <https://cs.stackexchange.com/>
+  * Philosophy <https://philosophy.stackexchange.com/>
+  * *more (10) * <https://stackexchange.com/sites#science>
+
+  * Meta Stack Exchange <https://meta.stackexchange.com/>
+  * Stack Apps <https://stackapps.com/>
+  * API <https://api.stackexchange.com/>
+  * Data <https://data.stackexchange.com/>
+  * Area 51 <https://area51.stackexchange.com/>
+
+  * Blog <https://stackoverflow.blog/?blb=1>
+  * Facebook <https://www.facebook.com/officialstackoverflow/>
+  * Twitter <https://twitter.com/stackoverflow>
+  * LinkedIn <https://linkedin.com/company/stack-overflow>
+
+site design / logo © 2018 Stack Exchange Inc; user contributions
+licensed under cc by-sa 3.0
+<https://creativecommons.org/licenses/by-sa/3.0/> with attribution
+required <https://stackoverflow.blog/2009/06/25/attribution-required/>.
+rev 2018.7.25.31175
+
+ 
+
